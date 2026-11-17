@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Quản lý thông tin{% endblock %}
+{% block heading %}Quản lý thông tin cơ bản{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Dịch vụ</h3>
+    <table>
+        <tr><th>Mã</th><th>Tên dịch vụ</th><th>Thời lượng</th><th>Giá</th><th></th></tr>
+        <tr><td>DV001</td><td>Massage Body</td><td>60 phút</td><td>400.000</td><td><button>Sửa</button></td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <h3>Nhân viên</h3>
+    <table>
+        <tr><th>Họ tên</th><th>Vai trò</th><th></th></tr>
+        <tr><td>Nguyễn Hồng</td><td>Kỹ thuật viên</td><td><button>Sửa</button></td></tr>
+    </table>
+</div>
+
+<div class="card">
+    <h3>Quy định</h3>
+    <div class="form-row">
+        <label>Số khách tối đa/ngày/nhân viên: <input type="number" value="5"></label>
+        <label>VAT (%): <input type="number" value="10"></label>
+        <label>Giảm giá tối đa (%): <input type="number" value="20"></label>
+        <button>Lưu</button>
+    </div>
+</div>
+{% endblock %}

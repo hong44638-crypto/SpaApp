@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <style>
+        body {
+            margin: 0; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #d7f0e6, #f6e9f0);
+            font-family: Arial, sans-serif;
+        }
+        .box {
+            background: #fff; padding: 36px; width: 320px;
+            border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.12);
+        }
+        h2 { text-align: center; margin-top: 0; color: #2e7d6b; }
+        input {
+            width: 100%; padding: 10px; margin: 8px 0 16px;
+            border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 11px; border: none; border-radius: 8px;
+            background: #2e7d6b; color: #fff; font-size: 16px; cursor: pointer;
+        }
+        button:hover { background: #256657; }
+        .error { color: #c0392b; text-align: center; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Đăng nhập Spa</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% for m in messages %}
+                <div class="error">{{ m }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <label>Tên đăng nhập</label>
+            <input type="text" name="username" required autofocus>
+
+            <label>Mật khẩu</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Đăng nhập</button>
+        </form>
+    </div>
+</body>
+</html>

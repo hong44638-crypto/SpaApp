@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Phiếu dịch vụ{% endblock %}
+{% block heading %}Phiếu dịch vụ{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Lập phiếu dịch vụ</h3>
+    <div class="form-row">
+        <input placeholder="Họ tên khách">
+        <select><option>Massage mặt</option></select>
+        <input type="number" placeholder="Thời lượng (15-120 phút)">
+        <input placeholder="Ghi chú">
+        <button>Lưu phiếu</button>
+    </div>
+</div>
+
+<table>
+    <tr><th>STT</th><th>Dịch vụ</th><th>Thời lượng</th><th>Giá</th><th>Ghi chú</th></tr>
+    <tr><td>1</td><td>Massage mặt</td><td>45 phút</td><td>300.000</td><td>Da nhạy cảm</td></tr>
+</table>
+{% endblock %}

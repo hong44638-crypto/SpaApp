@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Thống kê{% endblock %}
+{% block heading %}Thống kê - báo cáo{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="form-row">
+        <select><option>Tháng 11</option></select>
+        <input type="number" value="2026">
+        <button>Xem báo cáo</button>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Doanh thu theo tháng</h3>
+    <p>(Biểu đồ / bảng doanh thu sẽ đặt ở đây)</p>
+</div>
+
+<div class="card">
+    <h3>Tần suất sử dụng dịch vụ</h3>
+    <table>
+        <tr><th>Dịch vụ</th><th>Số lần sử dụng</th></tr>
+        <tr><td>Massage Body</td><td>0</td></tr>
+    </table>
+</div>
+{% endblock %}

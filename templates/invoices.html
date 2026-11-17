@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Hóa đơn{% endblock %}
+{% block heading %}Hóa đơn thanh toán{% endblock %}
+{% block content %}
+<div class="card">
+    <h3>Lập hóa đơn</h3>
+    <div class="form-row">
+        <input placeholder="Họ tên khách">
+        <select><option>Massage mặt</option></select>
+        <input type="number" placeholder="Giảm giá (%, tối đa 20)">
+        <button>Lập hóa đơn</button>
+    </div>
+</div>
+
+<table>
+    <tr><th>Họ tên</th><th>Dịch vụ</th><th>Giá</th><th>Giảm giá</th><th>VAT</th><th>Tổng tiền</th></tr>
+    <tr><td>Trần Thu Hằng</td><td>Massage mặt</td><td>300.000</td><td>0</td><td>30.000</td><td>330.000</td></tr>
+</table>
+{% endblock %}
