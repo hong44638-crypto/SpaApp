@@ -31,11 +31,11 @@
     <div class="box">
         <h2>Đăng nhập Spa</h2>
 
-        {% with messages = get_flashed_messages() %}
-            {% for m in messages %}
-                <div class="error">{{ m }}</div>
-            {% endfor %}
-        {% endwith %}
+        {% if err_msg %}
+
+                <div class="error">{{ err_msg }}</div>
+
+        {% endif %}
 
         <form method="POST">
             <label>Tên đăng nhập</label>
