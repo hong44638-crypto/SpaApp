@@ -22,7 +22,9 @@
         .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
         input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
         button { padding: 9px 18px; border: none; border-radius: 6px; background: #2e7d6b; color: #fff; cursor: pointer; }
-        .msg { color: #c0392b; margin-bottom: 15px; }
+        .msg { padding: 10px 14px; border-radius: 6px; margin-bottom: 15px; }
+.msg-success { background: #e3f6ec; color: #1e7e4f; border: 1px solid #b6e2c9; }
+.msg-error { background: #fdecea; color: #c0392b; border: 1px solid #f5c2bd; }
     </style>
 </head>
 <body>
@@ -71,10 +73,11 @@
     </span>
     {% endif %}
         </div>
-        <div class="content">
-            {% with messages = get_flashed_messages() %}
-                {% for m in messages %}<div class="msg">{{ m }}</div>{% endfor %}
-            {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, m in messages %}
+                <div class="msg {{ 'msg-success' if category == 'success' else 'msg-error' }}">{{ m }}</div>
+            {% endfor %}
+       {% endwith %}
             {% block content %}{% endblock %}
         </div>
     </div>

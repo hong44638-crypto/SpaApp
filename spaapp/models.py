@@ -1,3 +1,4 @@
+from datetime import datetime
 import hashlib
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
@@ -29,6 +30,18 @@ class Booking(db.Model):
     date = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(5), nullable=False)
     status = db.Column(db.String(20), default="Đã xác nhận")
+    service = db.relationship("Service")
+    staff = db.relationship("User")
+
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_name = db.Column(db.String(100), nullable=False)
+    service_id = db.Column(db.Integer, db.ForeignKey("service.id"), nullable=False)
+    staff_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    duration= db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    note = db.Column(db.String(200))
+    created_at = db.Column(db.DateTime, default=datetime.now)
     service = db.relationship("Service")
     staff = db.relationship("User")
 

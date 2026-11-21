@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, current_user
 
 from spaapp import app, db, login
 from spaapp import dao
-from models import seed_data, User, Service, Booking
+from models import seed_data, User, Service, Booking, Ticket
 
 
 @login.user_loader
@@ -41,7 +41,7 @@ def index():
 @app.route("/login", methods=["get", "post"])
 def login_my_user():
     if current_user.is_authenticated:
-        return redirect("/login")
+        return redirect("/")
 
     err_msg = None
     if request.method.__eq__("POST"):
@@ -125,10 +125,36 @@ def add_booking():
     return redirect(url_for("bookings"))
 
 
-@app.route("/tickets")
+@app.route("/tickets", methods=["GET", "POST"])
 @login_required("ktv", "admin")
 def tickets():
-    return render_template("tickets.html")
+    if request.method == "POST":
+        customer = request.form.get("customer_name", "").strip()
+        service_id = request.form.get("service_id",type=int)
+        duration = request.form.get("duration",type=int)
+        note = request.form.get("note","").strip()
+        service = db.session.get(Service, service_id) if service_id else None
+        if not customer:
+            flash("Vui lòng nhập tên khách hàng!","error")
+        elif not service:
+            flash("Dịch vụ không hợp lệ!","error")
+        elif duration is None or not (15<= duration <=120):
+            flash("Thời lượng phải từ 15 đến 120 phút!","error")
+        else:
+            db.session.add(Ticket(
+                customer_name=customer, service_id=service.id,
+                staff_id=current_user.id, duration=duration,
+                price=service.price, note=note,
+            ))
+            db.session.commit()
+            flash("Đã lưu phiếu dịch vụ!","success")
+        return redirect(url_for("tickets"))
+    services = Service.query.all()
+    ticket_list = Ticket.query.order_by(Ticket.id.desc()).all()
+    return render_template("tickets.html", services=services, tickets=ticket_list)
+@app.template_filter("vnd")
+def vnd(value):
+    return f"{value:,}".replace(",", ".")
 
 
 @app.route("/invoices")

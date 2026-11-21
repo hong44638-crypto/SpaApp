@@ -2,19 +2,33 @@
 {% block title %}Phiếu dịch vụ{% endblock %}
 {% block heading %}Phiếu dịch vụ{% endblock %}
 {% block content %}
+
+
 <div class="card">
     <h3>Lập phiếu dịch vụ</h3>
-    <div class="form-row">
-        <input placeholder="Họ tên khách">
-        <select><option>Massage mặt</option></select>
-        <input type="number" placeholder="Thời lượng (15-120 phút)">
-        <input placeholder="Ghi chú">
-        <button>Lưu phiếu</button>
-    </div>
+    <form method="POST" action="{{ url_for('tickets') }}" class="form-row">
+        <input name="customer_name" placeholder="Họ tên khách" required>
+        <select name="service_id" required>
+            {% for s in services %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="duration" placeholder="Thời lượng (15-120 phút)" min="15" max="120" required>
+        <input name="note" placeholder="Ghi chú">
+        <button type="submit">Lưu phiếu</button>
+    </form>
 </div>
 
 <table>
     <tr><th>STT</th><th>Dịch vụ</th><th>Thời lượng</th><th>Giá</th><th>Ghi chú</th></tr>
-    <tr><td>1</td><td>Massage mặt</td><td>45 phút</td><td>300.000</td><td>Da nhạy cảm</td></tr>
+    {% for t in tickets %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ t.service.name }}</td>
+        <td>{{ t.duration }} phút</td>
+        <td>{{ t.price | vnd }}</td>
+        <td>{{ t.note or "" }}</td>
+    </tr>
+    {% endfor %}
 </table>
 {% endblock %}
