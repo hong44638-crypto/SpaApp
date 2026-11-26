@@ -2,16 +2,33 @@
 {% block title %}Đặt lịch{% endblock %}
 {% block heading %}Danh sách đặt lịch{% endblock %}
 {% block content %}
+
+
+
+
 <div class="card">
     <h3>Thêm lịch đặt</h3>
-    <div class="form-row">
-        <input placeholder="Họ tên khách">
-        <select><option>Massage Body</option><option>Massage Face</option></select>
-        <select><option>Nguyễn Hồng</option><option> Đắc Vinh</option></select>
-        <input type="date">
-        <input type="time">
-        <button onclick="alert('Đặt lịch thành công!')">Đặt lịch</button>
-    </div>
+    <form method="POST" action="{{ url_for('guest_add_booking') }}" class="form-row">
+        <input type="text" name="customer_name" placeholder="Họ tên khách" required>
+
+        <select name="service_id" required>
+            <option value="">-- Chọn dịch vụ --</option>
+            {% for s in services %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="staff_id" required>
+            <option value="">-- Chọn nhân viên --</option>
+            {% for st in staff %}
+            <option value="{{ st.id }}">{{ st.full_name or st.username }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="date" required>
+        <input type="time" name="time" required>
+        <button type="submit">Đặt lịch</button>
+    </form>
 </div>
 
 

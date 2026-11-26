@@ -81,9 +81,7 @@ def logout_my_user():
 def home():
     return render_template("index.html")
 
-
-MAX_PER_DAY = 5
-
+MAX_PER_DAY=5
 
 @app.route("/bookings")
 @login_required("letan", "admin")
@@ -108,12 +106,12 @@ def add_booking():
         flash("Vui lòng nhập đầy đủ thông tin!")
         return redirect(url_for("bookings"))
 
-    # Quy định 1: trùng giờ -> từ chối
+
     if Booking.query.filter_by(staff_id=staff_id, date=date, time=time).first():
         flash("Nhân viên đã có lịch vào giờ này, vui lòng chọn giờ khác!")
         return redirect(url_for("bookings"))
 
-    # Quy định 2: mỗi nhân viên tối đa 5 khách/ngày
+
     if Booking.query.filter_by(staff_id=staff_id, date=date).count() >= MAX_PER_DAY:
         flash(f"Nhân viên này đã đủ {MAX_PER_DAY} khách trong ngày!")
         return redirect(url_for("bookings"))
@@ -176,10 +174,49 @@ def settings():
 
 
 
-@app.route("/Guest_Booking")
-def GuestBooking():
-    return render_template("GuestBooking.html")
+@app.route("/GuestBooking")
+def guest_booking():
+    services = Service.query.all()
+    staff = User.query.filter_by(role="ktv").all()
+    return render_template("GuestBooking.html",
+                           services=services, staff=staff)
 
 
+@app.route("/GuestBooking/add", methods=["POST"])
+def guest_add_booking():
+    customer = request.form.get("customer_name", "").strip()
+    service_id = request.form.get("service_id")
+    staff_id = request.form.get("staff_id")
+    date = request.form.get("date")
+    time = request.form.get("time")
+
+    if not (customer and service_id and staff_id and date and time):
+        flash("Vui lòng nhập đầy đủ thông tin!")
+        return redirect(url_for("guest_booking"))
+
+    if Booking.query.filter_by(staff_id=staff_id, date=date, time=time).first():
+        flash("Nhân viên đã có lịch vào giờ này, vui lòng chọn giờ khác!")
+        return redirect(url_for("guest_booking"))
+
+    if Booking.query.filter_by(staff_id=staff_id, date=date).count() >= MAX_PER_DAY:
+        flash(f"Nhân viên này đã đủ {MAX_PER_DAY} khách trong ngày!")
+        return redirect(url_for("guest_booking"))
+
+    db.session.add(Booking(customer_name=customer, service_id=int(service_id),
+                           staff_id=int(staff_id), date=date, time=time,
+                           status="Chờ xác nhận"))
+    db.session.commit()
+    flash("Đặt lịch thành công! Spa sẽ liên hệ xác nhận với bạn.")
+    return redirect(url_for("guest_booking"))
+
+@app.route("/bookings/confirm/<int:booking_id>", methods=["POST"])
+@login_required("letan", "admin")
+def confirm_booking(booking_id):
+    b = Booking.query.get_or_404(booking_id)
+    if b.status == "Chờ xác nhận":
+        b.status = "Đã xác nhận"
+        db.session.commit()
+        flash(f"Đã xác nhận lịch của khách {b.customer_name}.")
+    return redirect(url_for("bookings"))
 if __name__ == '__main__':
     app.run(debug=True, port=9999)

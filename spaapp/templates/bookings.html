@@ -2,20 +2,68 @@
 {% block title %}Đặt lịch{% endblock %}
 {% block heading %}Danh sách đặt lịch{% endblock %}
 {% block content %}
+
+
+
+
 <div class="card">
     <h3>Thêm lịch đặt</h3>
-    <div class="form-row">
-        <input placeholder="Họ tên khách">
-        <select><option>Massage Body</option> <option>Massage face</option></select>
-        <select><option>Nguyễn Hồng</option><option> Đắc Vinh</option></select>
-        <input type="date">
-        <input type="time">
-        <button>Đặt lịch</button>
-    </div>
+    <form method="POST" action="{{ url_for('add_booking') }}" class="form-row">
+        <input type="text" name="customer_name" placeholder="Họ tên khách" required>
+
+        <select name="service_id" required>
+            <option value="">-- Chọn dịch vụ --</option>
+            {% for s in services %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="staff_id" required>
+            <option value="">-- Chọn nhân viên --</option>
+            {% for st in staff %}
+            <option value="{{ st.id }}">{{ st.full_name or st.username }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="date" required>
+        <input type="time" name="time" required>
+        <button type="submit">Đặt lịch</button>
+    </form>
 </div>
 
 <table>
-    <tr><th>STT</th><th>Họ tên khách</th><th>Dịch vụ</th><th>Nhân viên thực hiện</th><th>Thời gian</th><th>Trạng thái</th></tr>
-    <tr><td>1</td><td>Trần Thu Hằng</td><td>Massage Body</td><td>Nguyễn Hồng</td><td>14:00</td><td>Đã xác nhận</td></tr>
+    <tr>
+        <th>STT</th>
+        <th>Họ tên khách</th>
+        <th>Dịch vụ</th>
+        <th>Nhân viên thực hiện</th>
+        <th>Ngày</th>
+        <th>Giờ</th>
+        <th>Trạng thái</th>
+    </tr>
+    {% for b in items %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ b.customer_name }}</td>
+        <td>{{ b.service.name }}</td>
+        <td>{{ b.staff.full_name or b.staff.username }}</td>
+        <td>{{ b.date }}</td>
+        <td>{{ b.time }}</td>
+        <td>
+    {% if b.status == "Chờ xác nhận" %}
+    <form method="POST" action="{{ url_for('confirm_booking', booking_id=b.id) }}" style="margin:0;">
+        <button type="submit" class="btn-confirm">Xác nhận</button>
+    </form>
+    {% else %}
+        <span class="badge-done">Đã xác nhận</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="7" style="text-align:center;">Chưa có lịch đặt nào.</td>
+    </tr>
+    {% endfor %}
 </table>
+
 {% endblock %}

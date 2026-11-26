@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     full_name = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(20), nullable=False)   # letan / ktv / thungan / admin
+    role = db.Column(db.String(20), nullable=False)
 
 
 class Service(db.Model):
@@ -56,6 +56,7 @@ def seed_data():
         User(username="letan", full_name="Lê Tân", role="letan", password_hash=pw),
         User(username="thungan", full_name="Thu Ngân", role="thungan", password_hash=pw),
         User(username="hong", full_name="Nguyễn Hồng", role="ktv", password_hash=pw),
+        User(username="vinh",full_name="Đắc Vinh",role="ktv",password_hash=pw),
         Service(code="DV001", name="Massage Body", duration=60, price=400000),
         Service(code="DV002", name="Massage mặt", duration=45, price=300000),
     ])
