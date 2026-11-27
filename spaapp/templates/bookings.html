@@ -21,7 +21,7 @@
         <select name="staff_id" required>
             <option value="">-- Chọn nhân viên --</option>
             {% for st in staff %}
-            <option value="{{ st.id }}">{{ st.full_name or st.username }}</option>
+            <option value="{{ st.id }}">{{ st.full_name  }}</option>
             {% endfor %}
         </select>
 
@@ -46,7 +46,7 @@
         <td>{{ loop.index }}</td>
         <td>{{ b.customer_name }}</td>
         <td>{{ b.service.name }}</td>
-        <td>{{ b.staff.full_name or b.staff.username }}</td>
+        <td>{{ b.staff.full_name  }}</td>
         <td>{{ b.date }}</td>
         <td>{{ b.time }}</td>
         <td>

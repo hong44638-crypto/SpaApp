@@ -3,23 +3,32 @@
 {% block heading %}Thống kê - báo cáo{% endblock %}
 {% block content %}
 <div class="card">
-    <div class="form-row">
-        <select><option>Tháng 11</option></select>
-        <input type="number" value="2026">
-        <button>Xem báo cáo</button>
-    </div>
+    <form method="GET" action="{{ url_for('reports') }}" class="form-row">
+        <label>Chọn tháng
+            <input type="month" name="month" value="{{ month }}" required>
+        </label>
+        <button type="submit">Xem báo cáo</button>
+    </form>
 </div>
 
 <div class="card">
-    <h3>Doanh thu theo tháng</h3>
-    <p>(Biểu đồ / bảng doanh thu sẽ đặt ở đây)</p>
+    <h3>Tổng quan tháng {{ month[5:] }}/{{ month[:4] }}</h3>
+    <p>Số hóa đơn: <strong>{{ invoice_count }}</strong></p>
+    <p>Doanh thu: <strong>{{ "{:,}".format(total_revenue|int).replace(",", ".") }} đ</strong></p>
 </div>
 
-<div class="card">
-    <h3>Tần suất sử dụng dịch vụ</h3>
-    <table>
-        <tr><th>Dịch vụ</th><th>Số lần sử dụng</th></tr>
-        <tr><td>Massage Body</td><td>0</td></tr>
-    </table>
-</div>
+<h3 style="margin-top:24px;">Tần suất sử dụng dịch vụ</h3>
+<table>
+    <tr><th>STT</th><th>Dịch vụ</th><th>Số lượt dùng</th><th>Doanh thu</th></tr>
+    {% for name, count, revenue in usage %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ name }}</td>
+        <td>{{ count }}</td>
+        <td>{{ "{:,}".format(revenue|int).replace(",", ".") }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center;">Tháng này chưa có hóa đơn nào.</td></tr>
+    {% endfor %}
+</table>
 {% endblock %}

@@ -14,19 +14,21 @@
             {% endfor %}
         </select>
         <input type="number" name="duration" placeholder="Thời lượng (15-120 phút)" min="15" max="120" required>
+        <input type="date" name="date" >
         <input name="note" placeholder="Ghi chú">
         <button type="submit">Lưu phiếu</button>
     </form>
 </div>
 
 <table>
-    <tr><th>STT</th><th>Dịch vụ</th><th>Thời lượng</th><th>Giá</th><th>Ghi chú</th></tr>
+    <tr><th>STT</th><th>Dịch vụ</th><th>Thời lượng</th><th>Giá</th> Ngày lập<th>Ghi chú</th></tr>
     {% for t in tickets %}
     <tr>
         <td>{{ loop.index }}</td>
         <td>{{ t.service.name }}</td>
         <td>{{ t.duration }} phút</td>
-        <td>{{ t.price | vnd }}</td>
+        <td>{{ t.price  }}</td>
+        <td>{{t.date}}</td>
         <td>{{ t.note or "" }}</td>
     </tr>
     {% endfor %}

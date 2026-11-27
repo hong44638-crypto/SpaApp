@@ -21,7 +21,7 @@
         <select name="staff_id" required>
             <option value="">-- Chọn nhân viên --</option>
             {% for st in staff %}
-            <option value="{{ st.id }}">{{ st.full_name or st.username }}</option>
+            <option value="{{ st.id }}">{{ st.full_name }}</option>
             {% endfor %}
         </select>
 

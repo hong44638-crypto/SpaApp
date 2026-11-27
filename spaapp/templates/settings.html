@@ -3,28 +3,45 @@
 {% block heading %}Quản lý thông tin cơ bản{% endblock %}
 {% block content %}
 <div class="card">
-    <h3>Dịch vụ</h3>
-    <table>
-        <tr><th>Mã</th><th>Tên dịch vụ</th><th>Thời lượng</th><th>Giá</th><th></th></tr>
-        <tr><td>DV001</td><td>Massage Body</td><td>60 phút</td><td>400.000</td><td><button>Sửa</button></td></tr>
-    </table>
+    <h3>Quy định chung</h3>
+    <form method="POST" action="{{ url_for('settings') }}" class="form-row">
+        <label>Mức VAT (%)
+            <input type="number" name="vat_percent" value="{{ '%g' % vat }}"
+                   min="0" max="100" step="0.5" required>
+        </label>
+        <label>Giới hạn khách/ngày/nhân viên
+            <input type="number" name="max_per_day" value="{{ per_day }}"
+                   min="1" max="50" required>
+        </label>
+        <label>Giảm giá tối đa (%)
+            <input type="number" name="max_discount_percent" value="{{ '%g' % max_disc }}"
+                   min="0" max="100" step="1" required>
+        </label>
+        <button type="submit">Lưu quy định</button>
+    </form>
 </div>
 
 <div class="card">
-    <h3>Nhân viên</h3>
+    <h3>Giá dịch vụ</h3>
     <table>
-        <tr><th>Họ tên</th><th>Vai trò</th><th></th></tr>
-        <tr><td>Nguyễn Hồng</td><td>Kỹ thuật viên</td><td><button>Sửa</button></td></tr>
+        <tr><th>Mã</th><th>Dịch vụ</th><th>Thời lượng</th><th>Giá (VNĐ)</th><th></th></tr>
+        {% for s in services %}
+        <tr>
+            <td>{{ s.code }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.duration }} phút</td>
+            <td>
+                <input type="number" name="price" value="{{ s.price }}"
+                       min="1000" step="1000" form="sv{{ s.id }}" required>
+            </td>
+            <td>
+                <form id="sv{{ s.id }}" method="POST"
+                      action="{{ url_for('update_service_price', service_id=s.id) }}">
+                    <button type="submit" class="btn-confirm">Cập nhật</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
-</div>
-
-<div class="card">
-    <h3>Quy định</h3>
-    <div class="form-row">
-        <label>Số khách tối đa/ngày/nhân viên: <input type="number" value="5"></label>
-        <label>VAT (%): <input type="number" value="10"></label>
-        <label>Giảm giá tối đa (%): <input type="number" value="20"></label>
-        <button>Lưu</button>
-    </div>
 </div>
 {% endblock %}

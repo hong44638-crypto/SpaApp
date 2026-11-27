@@ -2,18 +2,63 @@
 {% block title %}Hóa đơn{% endblock %}
 {% block heading %}Hóa đơn thanh toán{% endblock %}
 {% block content %}
+
+
 <div class="card">
-    <h3>Lập hóa đơn</h3>
-    <div class="form-row">
-        <input placeholder="Họ tên khách">
-        <select><option>Massage mặt</option></select>
-        <input type="number" placeholder="Giảm giá (%, tối đa 20)">
-        <button>Lập hóa đơn</button>
-    </div>
+    <h3>Phiếu dịch vụ chờ lập hóa đơn</h3>
+    <table>
+        <tr>
+            <th>Họ tên</th>
+            <th>Dịch vụ</th>
+            <th>Giá</th>
+            <th>Giảm giá ( %tối đa {{ max_percent }}%)</th>
+            <th></th>
+        </tr>
+        {% for t in pending %}
+        <tr>
+            <form method="POST" action="{{ url_for('create_invoice', ticket_id=t.id) }}">
+                <td>{{ t.customer_name }}</td>
+                <td>{{ t.service.name }}</td>
+                <td>{{ "{:,}".format(t.price).replace(",", ".") }}</td>
+                <td>
+                    <input type="number" name="discount_percent" value="0" min="0"
+                           max="{{ (t.price * max_percent / 100)|int }}" step="1">
+                </td>
+                <td><button type="submit" class="btn-confirm">Lập hóa đơn</button></td>
+            </form>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;">Không có phiếu nào chờ lập hóa đơn.</td></tr>
+        {% endfor %}
+    </table>
 </div>
 
+<h3 style="margin-top:24px;">Danh sách hóa đơn</h3>
 <table>
-    <tr><th>Họ tên</th><th>Dịch vụ</th><th>Giá</th><th>Giảm giá</th><th>VAT</th><th>Tổng tiền</th></tr>
-    <tr><td>Trần Thu Hằng</td><td>Massage mặt</td><td>300.000</td><td>0</td><td>30.000</td><td>330.000</td></tr>
+    <tr>
+        <th>Họ tên</th>
+        <th>Dịch vụ</th>
+        <th>Giá</th>
+        <th>Giảm giá</th>
+        <th>VAT</th>
+        <th>Tổng tiền</th>
+        <th>Ngày dịch vụ</th>
+        <th>Ngày lập</th>
+    </tr>
+    {% for i in items %}
+    <tr>
+        <td>{{ i.customer_name }}</td>
+        <td>{{ i.service_name }}</td>
+        <td>{{ "{:,}".format(i.price).replace(",", ".") }}</td>
+        <td>{{ "{:,}".format(i.discount).replace(",", ".") }}</td>
+        <td>{{ "{:,}".format(i.vat).replace(",", ".") }}</td>
+        <td><strong>{{ "{:,}".format(i.total).replace(",", ".") }}</strong></td>
+        <td>{{ i.date }}</td>
+        <td>{{ i.created_at.strftime("%d/%m/%Y %H:%M") }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" style="text-align:center;">Chưa có hóa đơn nào.</td></tr>
+    {% endfor %}
 </table>
+
 {% endblock %}
